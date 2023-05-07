@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('currencies', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 3)->unique()->nullable();
-            $table->date('created_at');
+            $table->string('name', 3)->unique();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

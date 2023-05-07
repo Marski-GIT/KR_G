@@ -13,9 +13,8 @@ return new class extends Migration {
         Schema::create('amounts', function (Blueprint $table) {
             $table->id();
             $table->integer('currency_id')->index();
-            $table->float('amount', 8, 2);
-            $table->date('created_at');
-            $table->index(['id', 'currency_id']);
+            $table->float('amount');
+            $table->timestamp('date')->useCurrent();
         });
     }
 
