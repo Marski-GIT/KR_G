@@ -29,8 +29,7 @@ class CurrencyRepository implements CurrencyInterface
         $allCurrencies = $this->amount->getAllCurrencies();
 
         foreach ($data as $value) {
-
-            $currencyName = strtoupper($value->currency);
+            $currencyName = strtoupper($value['currency']);
 
             if (!array_key_exists($currencyName, $allCurrencies)) {
                 $allCurrencies[$currencyName] = $this->amount->addCurrency($currencyName);
@@ -38,8 +37,8 @@ class CurrencyRepository implements CurrencyInterface
 
             $insertData[] = [
                 'currency_id' => $allCurrencies[$currencyName],
-                'date'        => $value->date ?? Carbon::now()->toDateString(),
-                'amount'      => $value->amount
+                'date'        => $value['date'] ?? Carbon::now()->toDateString(),
+                'amount'      => $value['amount']
             ];
         }
 
