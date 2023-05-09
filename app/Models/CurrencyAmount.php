@@ -7,7 +7,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\DB;
 
 class CurrencyAmount extends Model
 {
@@ -25,24 +24,23 @@ class CurrencyAmount extends Model
     {
         $currencyName = strtoupper($currencyName);
 
-        $id = DB::table('currencies')
-            ->where('name', '=', $currencyName)
+        $id = CurrencyNames::where('name', '=', $currencyName)
             ->first('id');
 
-        return $id->id ?? null;
+        return $id['id'] ?? null;
     }
 
     public function getAllCurrencies(): array
     {
         $data = [];
-        $currencies = DB::table('currencies')
-            ->orderBy('name')
-            ->get(['id', 'name'])->toArray();
+        $currencies = CurrencyNames::orderBy('name')
+            ->get(['id', 'name'])
+            ->toArray();
 
         foreach ($currencies as $value) {
-            $data[$value->name] = $value->id;
+            $data[$value['name']] = $value['id'];
         }
-        
+
         return $data;
     }
 
@@ -52,6 +50,6 @@ class CurrencyAmount extends Model
             'name' => strtoupper($currencyName),
         ];
 
-        return DB::table('currencies')->insertGetId($data);
+        return CurrencyNames::insertGetId($data);
     }
 }
