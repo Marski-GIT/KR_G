@@ -12,7 +12,10 @@ class CurrencyRepository implements CurrencyInterface
 {
 
     readonly CurrencyAmount $amount;
+    readonly array $todayCurrencies;
     private Collection $collection;
+    private array $insertData = [];
+    private array $insertCurrencies = [];
 
     public function __construct(CurrencyAmount $amount)
     {
@@ -20,13 +23,13 @@ class CurrencyRepository implements CurrencyInterface
     }
 
     /**
-     * @param array $data ['currency' => string, 'date' => YYYY-MM-DD, 'amount' => float].
-     * @return bool
+     * @param array $data ['currency' => string, 'amount' => float].
+     * @return array Returns arrays with added currencies.
      */
-    public function createAmounts(array $data = []): bool
+    public function createAmounts(array $data): array
     {
-        $insertData = [];
         $allCurrencies = $this->amount->getAllCurrencies();
+        $this->todayCurrencies = $this->getTodayCurrenciesId();
 
         foreach ($data as $value) {
             $currencyName = strtoupper($value['currency']);
@@ -35,25 +38,34 @@ class CurrencyRepository implements CurrencyInterface
                 $allCurrencies[$currencyName] = $this->amount->addCurrency($currencyName);
             }
 
-            $insertData[] = [
-                'currency_id' => $allCurrencies[$currencyName],
-                'date'        => $value['date'] ?? Carbon::now()->toDateString(),
-                'amount'      => $value['amount']
-            ];
+            if (!in_array($allCurrencies[$currencyName], $this->todayCurrencies)) {
+
+                $this->insertCurrencies[] = $currencyName;
+
+                $this->insertData[] = [
+                    'currency_id' => $allCurrencies[$currencyName],
+                    'amount'      => $value['amount']
+                ];
+            }
         }
 
-        return $this->amount->insert($insertData);
+        if (count($this->insertData) > 0) {
+            if ($this->amount->insert($this->insertData)) {
+                return $this->insertCurrencies;
+            }
+        }
+        return $this->insertCurrencies;
     }
 
     /**
      * @param string $date Date in the format YYYY-mm-dd.
-     * @return array
+     * @return array Returns the currencies of the selected day.
      */
     public function allOfTheDay(string $date): array
     {
         $this->collection = $this->amount
             ->with('currency')
-            ->whereDate('date', '=', $date)
+            ->whereDate('created_at', '=', $date)
             ->get();
 
         return $this->prepareData();
@@ -62,14 +74,14 @@ class CurrencyRepository implements CurrencyInterface
     /**
      * @param string $date Date in the format YYYY-mm-dd.
      * @param int $id Identifier of the currency name in the database.
-     * @return array
+     * @return array Returns the selected currency from the selected date.
      */
     public function selectedForTheDay(string $date, int $id): array
     {
         $this->collection = $this->amount
             ->with('currency')
             ->where('currency_id', $id)
-            ->whereDate('date', '=', $date)
+            ->whereDate('created_at', '=', $date)
             ->get();
 
         return $this->prepareData();
@@ -77,7 +89,7 @@ class CurrencyRepository implements CurrencyInterface
 
     /**
      * @param string $currencyName Currency abbreviation.
-     * @return int|null
+     * @return int|null Returns the currency name ID.
      */
     public function getIdCurrency(string $currencyName): ?int
     {
@@ -85,7 +97,7 @@ class CurrencyRepository implements CurrencyInterface
     }
 
     /**
-     * @return array
+     * @return array Returns arrays of data with modified keys.
      */
     private function prepareData(): array
     {
@@ -93,10 +105,28 @@ class CurrencyRepository implements CurrencyInterface
         foreach ($this->collection ?? [] as $amount) {
             $response[] = [
                 'currency' => $amount->currency->name,
-                'date'     => date('Y-m-d', strtotime($amount->date)),
+                'date'     => $amount->created_at->toDateString(),
                 'amount'   => $amount->amount
             ];
         }
         return $response;
+    }
+
+    /**
+     * @return array Returns today's currency ID arrays.
+     */
+    private function getTodayCurrenciesId(): array
+    {
+        $currenciesID = [];
+        $result = $this->amount->whereDate('created_at', Carbon::today())
+            ->distinct()
+            ->get('currency_id')
+            ->toArray();
+
+        foreach ($result as $value) {
+            $currenciesID[] = $value['currency_id'];
+        }
+
+        return $currenciesID;
     }
 }

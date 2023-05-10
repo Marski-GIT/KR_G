@@ -15,6 +15,10 @@ class CurrencyAmount extends Model
     protected $table = 'amounts';
     protected $primaryKey = 'id';
 
+    protected $casts = [
+        'created_at' => 'date:Y-m-d'
+    ];
+
     public function currency(): HasOne
     {
         return $this->hasOne(CurrencyNames::class, 'id', 'currency_id');

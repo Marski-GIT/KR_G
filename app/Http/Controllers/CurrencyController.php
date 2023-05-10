@@ -40,12 +40,12 @@ class CurrencyController extends Controller
     {
         $data = $request->validated();
 
-        $status = $this->repository->createAmounts($data);
+        $response = $this->repository->createAmounts($data);
 
-        if ($status) {
-            return response()->json(['message' => 'Created successfully'], 201);
+        if (count($response) > 0) {
+            return response()->json(['message' => 'Created successfully: ' . implode(', ', $response)], 201);
         }
-        return response()->json(['message' => 'Internal server error'], 500);
+        return response()->json(['message' => 'Currency update only once a day.'], 400);
     }
 
     /**
