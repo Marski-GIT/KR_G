@@ -25,7 +25,7 @@ class CreateAmountRequest extends FormRequest
         return [
             '*.currency' => ['required', 'regex:/(EUR)|(USD)|(GBP)|(eur)|(usd)|(gbp)/'],
             '*.date'     => ['date_format:Y-m-d'],
-            '*.amount'   => ['required', 'numeric', 'gt:0'],
+            '*.amount'   => ['required', 'numeric', 'regex:/^(?:[1-9]\d*|0)?(?:\.\d+)?$/'],
         ];
     }
 
@@ -36,7 +36,7 @@ class CreateAmountRequest extends FormRequest
             '*.currency.regex'    => 'Only EUR, USD, GBP currencies.',
             '*.amount.required'   => 'Value is required.',
             '*.amount.numeric'    => 'The value must be a number.',
-            '*.amount.gt'         => 'The value must be positiver.',
+            '*.amount.regex'      => 'The value must be positiver.',
             '*.date'              => 'Invalid date format. Date in Y-m-d format.'
         ];
     }
