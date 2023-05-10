@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Repository;
 interface CurrencyInterface
 {
-    public function createAmounts(array $data);
+    public function createAmounts(array $data): array;
 
-    public function allOfTheDay(string $date);
+    public function allOfTheDay(string $date): array;
 
-    public function selectedForTheDay(string $date, int $id);
+    public function selectedForTheDay(string $date, int $id): array;
 
-    public function getIdCurrency(string $currencyName);
+    public function getIdCurrency(string $currencyName): ?int;
 }
