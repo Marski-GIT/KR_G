@@ -48,7 +48,7 @@ Wykonując poniższe zadanie:
 ## Autoryzacja
 
 - rejestracja:
-    - http://127.0.0.1:8000/api/user/register
+    - /api/user/register
     - name (wymagane)
     - email (wymagane)
     - password (wymagane)
@@ -56,33 +56,32 @@ Wykonując poniższe zadanie:
         - 0 (GET)
         - 1 (POST)
 - logowanie:
-    - http://127.0.0.1:8000/api/user/login
+    - /api/user/login
 - wylogowanie:
-    - http://127.0.0.1:8000/api/user/logout
+    - /api/user/logout
 
 ## Endpointy API
 
 - lista kursów z danego dnia (GET):
-    - http://127.0.0.1:8000/api/currency/{date}
+    - /api/currency/{date}
 - lista kursów dla wybranej waluty z danego dnia (GET):
-    - http://127.0.0.1:8000/api/currency/{date}/{currency}
+    - /api/currency/{date}/{currency}
 - dodawanie kursu waluty (POST):
-    - http://127.0.0.1:8000/api/currency
-    - przyjmuje tablicę:
-    - [
-      {
-      "currency": "EUR",
-      "amount": 6.78
-      },
-      {
-      "currency": "GBP",
-      "amount": 7.78
-      }, {
-      "currency": "USD",
-      "amount": 0.78
-      }
-      ]
-    - tablica może posiadać jeden element.
+    - /api/currency
+        - przyjmuje tablicę:
+        - [
+          {
+          "currency": "EUR",
+          "amount": 6.78
+          },
+          {
+          "currency": "GBP",
+          "amount": 7.78
+          }, {
+          "currency": "USD",
+          "amount": 0.78
+          }
+          ]
 
 ## Postman.
 
@@ -92,4 +91,4 @@ Plik w głównym katalogu projektu. Jego nazwa: KR_Group.postman_collection.json
 
 [Marski-GIT](https://github.com/Marski-GIT/KR_G)
 
-[Kontakt](kontakt@marski.pl): kontakt@marski.pl
+[Kontakt](kontakt@marski.pl)
