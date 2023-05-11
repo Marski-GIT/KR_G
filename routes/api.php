@@ -24,19 +24,28 @@ Route::group([
 });
 
 Route::group([
-    'prefix'     => 'currency',
-    'as'         => 'currency',
-    'middleware' => ['auth:sanctum'],
+    'middleware' => 'auth:sanctum'
 ], function () {
-    Route::get('/{date}', [CurrencyController::class, 'index']);
-    Route::get('/{date}/{currency}', [CurrencyController::class, 'show']);
-    Route::post('', [CurrencyController::class, 'store']);
-});
 
-Route::group([
-    'prefix'     => 'user',
-    'as'         => 'user',
-    'middleware' => ['auth:sanctum'],
-], function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::group([
+        'prefix' => 'currency',
+        'as'     => 'currency',
+    ], function () {
+        Route::get('/{date}', [CurrencyController::class, 'index']);
+        Route::get('/{date}/{currency}', [CurrencyController::class, 'show']);
+    });
+
+    Route::group([
+        'prefix' => 'currency',
+        'as'     => 'currency',
+    ], function () {
+        Route::post('', [CurrencyController::class, 'store']);
+    });
+
+    Route::group([
+        'prefix' => 'user',
+        'as'     => 'user',
+    ], function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+    });
 });

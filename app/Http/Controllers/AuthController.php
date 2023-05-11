@@ -20,19 +20,21 @@ class AuthController extends Controller
         $fields = $request->validate([
             'name'     => 'required|string',
             'email'    => 'required|string|unique:users,email',
-            'password' => 'required'
+            'password' => 'required',
+            'role'     => 'integer|min:0|max:1'
         ]);
 
         $user = User::create([
             'name'     => $fields['name'],
             'email'    => $fields['email'],
-            'password' => bcrypt($fields['password'])
+            'password' => bcrypt($fields['password']),
+            'role'     => $fields['role'] ?? 0
         ]);
 
         $token = $user->createToken('api-currency')->plainTextToken;
 
         $response = [
-            'user'  => 'Hello' . $user->name,
+            'user'  => 'Welcome ' . $user->name,
             'token' => $token,
         ];
 
