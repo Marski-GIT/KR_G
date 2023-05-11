@@ -7,60 +7,89 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+# Treść zadania
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Pochwal się swoimi umiejętnościami!
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Wykonując poniższe zadanie:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- użyj frameworka Laravel lub Symfony.
+- nie masz limitu czasowego na wykonie zdania.
+- ważna jest architektura wybranego rozwiązania.
+- rozwiązanie zadania służy jedynie do celów rekrutacyjnych, nie zostanie wykorzystane w przyszłości.
 
-## Learning Laravel
+## Zadanie
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Zaimplementuj API dla prostego systemu do zapisywania kursu walut (EUR, USD, GBP).
+2. Zadanie rekrutacyjne powinno zostać umieszczone na gitlab/github jako publiczny projekt.
+3. Po ukończeniu zadania wyślij do nas wiadomość z linkiem do repozytorium.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Założenia biznesowe
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Kurs walut zapisywany jest raz dziennie
+- Odpytywanie endpoitów powinno być zabezpieczone autoryzacją i rolą dla API
 
-## Laravel Sponsors
+### Wymagane endpointy
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- (POST) Autoryzacja
+- (POST) Dodanie kursu walut
+- (GET) Lista kursów walut z danego dnia
 
-### Premium Partners
+  [
+  {"currency":"EUR", "date":"2023-14-13","amount": 4.66},
+  {"currency":"USD", "date":"2023-14-13","amount": 4.86},
+  {"currency":"GBP", "date":"2023-14-13","amount": 6.66}
+  ]
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+- (GET) Pobranie kursu dla wybranej waluty
 
-## Contributing
+# Dokumentacja
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Autoryzacja
 
-## Code of Conduct
+- rejestracja:
+    - http://127.0.0.1:8000/api/user/register
+    - name (wymagane)
+    - email (wymagane)
+    - password (wymagane)
+    - rola (uprawnienia | domyślnie 0)
+        - 0 (GET)
+        - 1 (POST)
+- logowanie:
+    - http://127.0.0.1:8000/api/user/login
+- wylogowanie:
+    - http://127.0.0.1:8000/api/user/logout
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Endpointy API
 
-## Security Vulnerabilities
+- lista kursów z danego dnia (GET):
+    - http://127.0.0.1:8000/api/currency/{date}
+- lista kursów dla wybranej waluty z danego dnia (GET):
+    - http://127.0.0.1:8000/api/currency/{date}/{currency}
+- dodawanie kursu waluty (POST):
+    - http://127.0.0.1:8000/api/currency
+    - przyjmuje tablicę:
+    - [
+      {
+      "currency": "EUR",
+      "amount": 6.78
+      },
+      {
+      "currency": "GBP",
+      "amount": 7.78
+      }, {
+      "currency": "USD",
+      "amount": 0.78
+      }
+      ]
+    - tablica może posiadać jeden element.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Postman.
 
-## License
+Plik w głównym katalogu projektu. Jego nazwa: KR_Group.postman_collection.json
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Repozytorium
+
+[Marski-GIT](https://github.com/Marski-GIT/KR_G)
+
+[Kontakt](kontakt@marski.pl): kontakt@marski.pl
